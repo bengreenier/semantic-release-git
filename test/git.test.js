@@ -2,7 +2,15 @@ import path from 'path';
 import test from 'ava';
 import {outputFile, appendFile} from 'fs-extra';
 import {add, filterModifiedFiles, commit, gitHead, push} from '../lib/git';
-import {gitRepo, gitCommits, gitGetCommits, gitStaged, gitRemoteHead} from './helpers/git-utils';
+import {
+  gitRepo,
+  gitCommits,
+  gitGetCommits,
+  gitStaged,
+  gitRemoteHead,
+  gitGetTag,
+  gitTagVersion,
+} from './helpers/git-utils';
 
 test('Add file to index', async t => {
   // Create a git repository, set the current working directory at the root of the repo
@@ -95,4 +103,17 @@ test('Push commit to remote repository', async t => {
   await push(repositoryUrl, 'master', {cwd});
 
   t.is(await gitRemoteHead(repositoryUrl, {cwd}), hash);
+});
+
+test('Push only tags to remote repository', async t => {
+  // Create a git repository with a remote, set the current working directory at the root of the repo
+  const {cwd, repositoryUrl} = await gitRepo(true);
+  const [{hash}] = await gitCommits(['Test commit'], {cwd});
+
+  const testTagName = 'git.test.push-only-tags';
+  await gitTagVersion(testTagName, undefined, {cwd});
+  await push('origin', '', {cwd});
+
+  t.is(await gitGetTag(testTagName, {cwd}), hash);
+  t.not(await gitRemoteHead(repositoryUrl, {cwd}), hash);
 });

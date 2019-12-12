@@ -112,6 +112,25 @@ export async function gitTagVersion(tagName, sha, execaOpts) {
 }
 
 /**
+ * Find the sha of an existing tag in the current git repository.
+ *
+ * @param {String} tagName
+ * @param {Object} [execaOpts]
+ */
+export async function gitGetTag(tagName, execaOpts) {
+  const command = await execa('git', ['ls-remote', '--tags', './.', tagName], execaOpts);
+  const shaAndRefs = command.stdout.split('\n');
+
+  if (shaAndRefs.length !== 1) {
+    throw new Error(`tag enumeration yielded incorrect number of results: ${shaAndRefs.length}: \n${command.stdout}`);
+  }
+
+  const firstShaAndRef = shaAndRefs[0];
+
+  return /(.+)\s/.exec(firstShaAndRef)[1];
+}
+
+/**
  * Create a shallow clone of a git repository and change the current working directory to the cloned repository root.
  * The shallow will contain a limited number of commit and no tags.
  *
