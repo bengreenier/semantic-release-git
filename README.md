@@ -1,4 +1,6 @@
-# @semantic-release/git
+# @bengreenier/semantic-release-git
+
+> Forked to verify new functionality, and because haven't talked to upstream authors about this new `tagOnly` feature that this repo exists to create.
 
 [**semantic-release**](https://github.com/semantic-release/semantic-release) plugin to commit release assets to the project's [git](https://git-scm.com/) repository.
 

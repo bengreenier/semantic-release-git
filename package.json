@@ -1,8 +1,8 @@
 {
-  "name": "@semantic-release/git",
+  "name": "@bengreenier/semantic-release-git",
   "description": "semantic-release plugin to commit release assets to the project's git repository",
-  "version": "0.0.0-development",
-  "author": "Pierre Vanduynslager (https://github.com/pvdlg)",
+  "version": "1.0.0-beta",
+  "author": "Ben Greenier",
   "ava": {
     "files": [
       "test/**/*.test.js"
@@ -50,7 +50,7 @@
     "lib",
     "index.js"
   ],
-  "homepage": "https://github.com/semantic-release/git#readme",
+  "homepage": "https://github.com/bengreenier/semantic-release-git#readme",
   "keywords": [
     "changelog",
     "commit",
@@ -88,7 +88,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/semantic-release/git.git"
+    "url": "https://github.com/bengreenier/semantic-release-git.git"
   },
   "scripts": {
     "codecov": "codecov -f coverage/coverage-final.json",
