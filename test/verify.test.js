@@ -59,6 +59,10 @@ test('Verify "assets" is an Array of Object with a glob Arrays in path property'
   t.notThrows(() => verify({assets}));
 });
 
+test('Verify "tagOnly" is a bool', t => {
+  t.notThrows(() => verify({tagOnly: true}));
+});
+
 test('Throw SemanticReleaseError if "message" option is not a String', t => {
   const message = 42;
   const [error] = t.throws(() => verify({message}));
@@ -83,6 +87,6 @@ test('Throw SemanticReleaseError if "message" option is a whitespace String', t 
   t.is(error.code, 'EINVALIDMESSAGE');
 });
 
-test('Verify undefined "message" and "assets"', t => {
+test('Verify undefined "message", "assets", "tagOnly"', t => {
   t.notThrows(() => verify({}));
 });

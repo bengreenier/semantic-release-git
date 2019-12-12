@@ -3,7 +3,7 @@ import test from 'ava';
 import {outputFile} from 'fs-extra';
 import {stub} from 'sinon';
 import prepare from '../lib/prepare';
-import {gitRepo, gitGetCommits, gitCommitedFiles} from './helpers/git-utils';
+import {gitRepo, gitGetCommits, gitCommitedFiles, gitGetTag, gitRemoteHead} from './helpers/git-utils';
 
 test.beforeEach(t => {
   // Stub the logger functions
@@ -181,6 +181,21 @@ test('Commit files matching the patterns in "assets", including dot files', asyn
 
   t.deepEqual(await gitCommitedFiles('HEAD', {cwd, env}), ['dist/.dotfile']);
   t.deepEqual(t.context.log.args[0], ['Found %d file(s) to commit', 1]);
+});
+
+test('Commit to tag only, not a specific branch', async t => {
+  const {cwd, repositoryUrl} = await gitRepo(true);
+  const pluginConfig = {assets: 'dist', tagOnly: true};
+  const options = {repositoryUrl, branch: 'master'};
+  const env = {};
+  const lastRelease = {};
+  const nextRelease = {version: '2.0.0', gitTag: 'v2.0.0'};
+  await outputFile(path.resolve(cwd, 'dist/.dotfile'), 'Test content');
+
+  await prepare(pluginConfig, {cwd, env, options, lastRelease, nextRelease, logger: t.context.logger});
+
+  t.deepEqual(await gitCommitedFiles('HEAD', {cwd, env}), ['dist/.dotfile']);
+  t.notDeepEqual(await gitRemoteHead(repositoryUrl), await gitGetTag(nextRelease.gitTag));
 });
 
 test('Set the commit author and committer name/email based on environment variables', async t => {
